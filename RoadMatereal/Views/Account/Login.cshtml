@@ -1,0 +1,16 @@
+﻿@model RoadMatereal.ViewModels.LoginViewModel
+
+<form asp-action="Login" method="post">
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Password"></label>
+        <input asp-for="Password" type="password" class="form-control" />
+    </div>
+    <div class="form-group">
+        <input asp-for="RememberMe" type="checkbox" /> Remember me
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+</form>
