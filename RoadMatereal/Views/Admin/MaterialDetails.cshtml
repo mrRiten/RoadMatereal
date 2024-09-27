@@ -1,0 +1,9 @@
+﻿@model Material
+
+<h2>Детали материала: @Model.Name</h2>
+
+<p>Описание: @Model.Description</p>
+<p>Цена: @Model.Price руб.</p>
+<p>Поставщик: @Model.Supplier?.Name</p>
+
+<a href="@Url.Action("Materials", "Admin")" class="btn btn-primary">Назад к материалам</a>

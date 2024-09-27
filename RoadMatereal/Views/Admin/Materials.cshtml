@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Material>
+
+<h2>Управление материалами</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Описание</th>
+            <th>Цена</th>
+            <th>Поставщик</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var material in Model)
+        {
+            <tr>
+                <td>@material.Name</td>
+                <td>@material.Description</td>
+                <td>@material.Price руб.</td>
+                <td>@material.Supplier?.Name</td>
+                <td>
+                    <a href="@Url.Action("MaterialDetails", "Admin", new { id = material.IdMaterial })" class="btn btn-info">Детали</a>
+                    <a href="@Url.Action("EditMaterial", "Admin", new { id = material.IdMaterial })" class="btn btn-warning">Редактировать</a>
+                    <form action="@Url.Action("DeleteMaterial", "Admin", new { id = material.IdMaterial })" method="post" style="display:inline;">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="@Url.Action("CreateMaterial", "Admin")" class="btn btn-primary">Создать материал</a>

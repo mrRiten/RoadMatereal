@@ -1,0 +1,15 @@
+﻿@model Status
+
+<h2>Добавление нового статуса</h2>
+
+<form asp-action="CreateStatus" method="post">
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        <label for="Name">Название статуса</label>
+        <input asp-for="Name" class="form-control" />
+        @Html.ValidationMessageFor(model => model.Name)
+    </div>
+    <button type="submit" class="btn btn-success">Создать</button>
+</form>
+
+<a href="@Url.Action("Statuses", "Admin")" class="btn btn-primary">Назад к статусам</a>

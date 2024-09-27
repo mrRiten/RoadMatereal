@@ -1,0 +1,31 @@
+﻿@model Material
+
+<h2>Редактирование материала: @Model.Name</h2>
+
+<form asp-action="EditMaterial" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="IdMaterial" />
+    <div class="form-group">
+        <label for="Name">Название</label>
+        <input asp-for="Name" class="form-control" />
+        @Html.ValidationMessageFor(model => model.Name)
+    </div>
+    <div class="form-group">
+        <label for="Description">Описание</label>
+        <input asp-for="Description" class="form-control" />
+        @Html.ValidationMessageFor(model => model.Description)
+    </div>
+    <div class="form-group">
+        <label for="Price">Цена</label>
+        <input asp-for="Price" class="form-control" />
+        @Html.ValidationMessageFor(model => model.Price)
+    </div>
+    <div class="form-group">
+        <label for="SupplierID">Поставщик</label>
+        <input asp-for="SupplierID" class="form-control" />
+        @Html.ValidationMessageFor(model => model.SupplierID)
+    </div>
+    <button type="submit" class="btn btn-success">Сохранить</button>
+</form>
+
+<a href="@Url.Action("Materials", "Admin")" class="btn btn-primary">Назад к материалам</a>

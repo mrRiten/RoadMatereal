@@ -1,0 +1,16 @@
+﻿@model Status
+
+<h2>Редактирование статуса: @Model.Name</h2>
+
+<form asp-action="EditStatus" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="IdStatus" />
+    <div class="form-group">
+        <label for="Name">Название статуса</label>
+        <input asp-for="Name" class="form-control" />
+        @Html.ValidationMessageFor(model => model.Name)
+    </div>
+    <button type="submit" class="btn btn-success">Сохранить</button>
+</form>
+
+<a href="@Url.Action("Statuses", "Admin")" class="btn btn-primary">Назад к статусам</a>

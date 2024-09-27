@@ -1,0 +1,25 @@
+﻿@model Order
+
+<h2>Создание нового заказа</h2>
+
+<form asp-action="CreateOrder" method="post">
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        <label for="Date">Дата</label>
+        <input asp-for="Date" class="form-control" />
+        @Html.ValidationMessageFor(model => model.Date)
+    </div>
+    <div class="form-group">
+        <label for="ClientID">Клиент</label>
+        <input asp-for="ClientID" class="form-control" />
+        @Html.ValidationMessageFor(model => model.ClientID)
+    </div>
+    <div class="form-group">
+        <label for="StatusID">Статус</label>
+        <input asp-for="StatusID" class="form-control" />
+        @Html.ValidationMessageFor(model => model.StatusID)
+    </div>
+    <button type="submit" class="btn btn-success">Создать</button>
+</form>
+
+<a href="@Url.Action("Orders", "Admin")" class="btn btn-primary">Назад к заказам</a>

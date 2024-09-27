@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Status>
+
+<h2>Управление статусами</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Название статуса</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var status in Model)
+        {
+            <tr>
+                <td>@status.Name</td>
+                <td>
+                    <a href="@Url.Action("EditStatus", "Admin", new { id = status.IdStatus })" class="btn btn-warning">Редактировать</a>
+                    <form action="@Url.Action("DeleteStatus", "Admin", new { id = status.IdStatus })" method="post" style="display:inline;">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="@Url.Action("CreateStatus", "Admin")" class="btn btn-primary">Добавить статус</a>

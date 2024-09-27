@@ -1,0 +1,15 @@
+﻿@model RoadMatereal.ViewModels.AdminDashboardViewModel
+
+<h2>Панель администратора</h2>
+
+<div class="dashboard">
+    <p>Всего заказов: @Model.OrderCount</p>
+    <p>Всего материалов: @Model.MaterialCount</p>
+    <p>Всего поставщиков: @Model.SupplierCount</p>
+    <p>Всего статусов: @Model.StatusCount</p>
+</div>
+
+<a href="@Url.Action("Orders", "Admin")" class="btn btn-primary">Управление заказами</a>
+<a href="@Url.Action("Materials", "Admin")" class="btn btn-primary">Управление материалами</a>
+<a href="@Url.Action("Suppliers", "Admin")" class="btn btn-primary">Управление поставщиками</a>
+<a href="@Url.Action("Statuses", "Admin")" class="btn btn-primary">Управление статусами</a>

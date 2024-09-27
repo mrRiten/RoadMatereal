@@ -1,0 +1,17 @@
+﻿@model Order
+
+<h2>Детали заказа #@Model.IdOrder</h2>
+
+<p>Дата: @Model.Date.ToShortDateString()</p>
+<p>Клиент: @Model.Client?.FirstName @Model.Client?.LastName</p>
+<p>Статус: @Model.Status?.Name</p>
+
+<h3>Позиции заказа</h3>
+<ul>
+    @foreach (var item in Model.OrderItems)
+    {
+        <li>@item.Material?.Name - @item.Count шт. по @item.Price руб.</li>
+    }
+</ul>
+
+<a href="@Url.Action("Orders", "Admin")" class="btn btn-primary">Назад к заказам</a>
