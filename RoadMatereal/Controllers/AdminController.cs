@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RoadMatereal.Models;
 using RoadMatereal.Services;
 using RoadMatereal.ViewModels;
 
 namespace RoadMatereal.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminController(IOrderService orderService, IMaterialService materialService,
         ISupplierService supplierService, IStatusService statusService) : Controller
     {
