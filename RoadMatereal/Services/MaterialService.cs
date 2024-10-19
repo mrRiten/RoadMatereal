@@ -8,6 +8,9 @@ namespace RoadMatereal.Services
         Task<IEnumerable<Material>> GetAllMaterialsAsync();
         Task<Material> GetMaterialByIdAsync(int id);
         Task CreateMaterialAsync(Material material);
+
+        Task<IEnumerable<Material>> GetBySupplierAsync(int? supplierId);
+
         Task UpdateMaterialAsync(Material material);
         Task DeleteMaterialAsync(int id);
     }
@@ -50,6 +53,13 @@ namespace RoadMatereal.Services
                 _context.Materials.Remove(material);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<IEnumerable<Material>> GetBySupplierAsync(int? supplierId)
+        {
+            return await _context.Materials
+                .Where(m => m.SupplierID == supplierId)
+                .ToListAsync();
         }
     }
 

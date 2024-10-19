@@ -1,22 +1,48 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RoadMatereal.Models;
+using RoadMatereal.Services;
+using RoadMatereal.ViewModels;
 using System.Diagnostics;
 
 namespace RoadMatereal.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController(ILogger<HomeController> logger,
+        IMaterialService materialService, ISupplierService supplierService) : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<HomeController> _logger = logger;
+        private readonly IMaterialService _materialService = materialService;
+        private readonly ISupplierService _supplierService = supplierService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public async Task<IActionResult> Index(int? supplierId)
         {
-            _logger = logger;
+            IEnumerable<Material> materials;
+            var supplier = await _supplierService.GetAllSuppliersAsync();
+
+            if (supplierId != null)
+            {
+                materials = await _materialService.GetBySupplierAsync(supplierId);
+            }
+            else
+            {
+                materials = await _materialService.GetAllMaterialsAsync();
+            }
+
+            // Создание ViewModel
+            var viewModel = new MaterialViewModel
+            {
+                Materials = materials,
+                Suppliers = supplier,
+                SelectedSupplierId = supplierId
+            };
+
+            return View(viewModel);
         }
 
-        public IActionResult Index()
+        [HttpPost]
+        public IActionResult AddToCart(int MaterialId)
         {
-            return View();
+            return RedirectToAction("Index");
         }
 
         public IActionResult Privacy()

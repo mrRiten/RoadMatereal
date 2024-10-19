@@ -6,7 +6,7 @@ using RoadMatereal.ViewModels;
 
 namespace RoadMatereal.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class AdminController(IOrderService orderService, IMaterialService materialService,
         ISupplierService supplierService, IStatusService statusService) : Controller
     {
