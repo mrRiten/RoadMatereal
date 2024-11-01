@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoadMatereal.Models;
 
@@ -11,9 +12,11 @@ using RoadMatereal.Models;
 namespace RoadMatereal.Migrations
 {
     [DbContext(typeof(RoadMaterialContext))]
-    partial class RoadMaterialContextModelSnapshot : ModelSnapshot
+    [Migration("20241031225447_Edit")]
+    partial class Edit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

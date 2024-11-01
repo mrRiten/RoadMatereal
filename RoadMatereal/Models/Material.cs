@@ -11,6 +11,7 @@ namespace RoadMatereal.Models
         public required string Description { get; set; }
         public required string Unit { get; set; }
         public required decimal Price { get; set; }
+
         [DefaultValue(0)]
         public int Count { get; set; }
 

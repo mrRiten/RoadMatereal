@@ -7,7 +7,7 @@ namespace RoadMatereal.Models
     {
         public RoadMaterialContext(DbContextOptions<RoadMaterialContext> options) : base(options) { }
 
-        public new DbSet<ApplicationUser> Users { get; set; }
+        // DbSets for other entities
         public DbSet<Order> Orders { get; set; }
         public DbSet<Status> Statuses { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }

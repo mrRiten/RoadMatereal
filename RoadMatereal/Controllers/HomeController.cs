@@ -4,20 +4,25 @@ using RoadMatereal.Models;
 using RoadMatereal.Services;
 using RoadMatereal.ViewModels;
 using System.Diagnostics;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 
 namespace RoadMatereal.Controllers
 {
     public class HomeController(ILogger<HomeController> logger,
-        IMaterialService materialService, ISupplierService supplierService) : Controller
+        IMaterialService materialService, ISupplierService supplierService, IOrderService orderService,
+        UserManager<ApplicationUser> userManager) : Controller
     {
         private readonly ILogger<HomeController> _logger = logger;
         private readonly IMaterialService _materialService = materialService;
         private readonly ISupplierService _supplierService = supplierService;
+        private readonly IOrderService _orderService = orderService;
+        private readonly UserManager<ApplicationUser> _userManager = userManager;
 
         public async Task<IActionResult> Index(int? supplierId)
         {
             IEnumerable<Material> materials;
-            var supplier = await _supplierService.GetAllSuppliersAsync();
+            var suppliers = await _supplierService.GetAllSuppliersAsync();
 
             if (supplierId != null)
             {
@@ -28,11 +33,10 @@ namespace RoadMatereal.Controllers
                 materials = await _materialService.GetAllMaterialsAsync();
             }
 
-            // Создание ViewModel
             var viewModel = new MaterialViewModel
             {
                 Materials = materials,
-                Suppliers = supplier,
+                Suppliers = suppliers,
                 SelectedSupplierId = supplierId
             };
 
@@ -40,8 +44,57 @@ namespace RoadMatereal.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddToCart(int MaterialId)
+        public async Task<IActionResult> AddToOrder(int materialId)
         {
+            // Check if the user is authenticated
+            if (!User.Identity.IsAuthenticated)
+            {
+                // Redirect to login or handle unauthenticated access
+                return RedirectToAction("Login", "Account");
+            }
+
+            // Get the user ID safely
+            var userIdString = _userManager.GetUserId(HttpContext.User);
+
+            if (string.IsNullOrEmpty(userIdString))
+            {
+                // Handle the case where userId is null or empty
+                return BadRequest("User is not authenticated.");
+            }
+
+            var userId = int.Parse(userIdString); // Now safe to parse
+
+            // Create or get the current order
+            var order = await _orderService.GetCurrentOrderAsync(userId);
+
+            if (order == null)
+            {
+                order = new Order
+                {
+                    Date = DateTime.Now,
+                    StatusID = 5,
+                    ClientID = userId,
+                };
+
+                await _orderService.CreateOrderAsync(order);
+            }
+
+            // Add the material to the order as an OrderItem
+            var material = await _materialService.GetMaterialByIdAsync(materialId);
+
+            if (material != null)
+            {
+                var orderItem = new OrderItem
+                {
+                    MaterialID = material.IdMaterial,
+                    OrderID = order.IdOrder,
+                    Count = 1,
+                    Price = material.Price
+                };
+
+                await _orderService.AddOrderItemToOrder(orderItem);
+            }
+
             return RedirectToAction("Index");
         }
 

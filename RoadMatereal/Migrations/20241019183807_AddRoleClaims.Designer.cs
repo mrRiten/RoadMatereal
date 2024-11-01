@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoadMatereal.Models;
 
@@ -11,9 +12,11 @@ using RoadMatereal.Models;
 namespace RoadMatereal.Migrations
 {
     [DbContext(typeof(RoadMaterialContext))]
-    partial class RoadMaterialContextModelSnapshot : ModelSnapshot
+    [Migration("20241019183807_AddRoleClaims")]
+    partial class AddRoleClaims
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -181,6 +184,9 @@ namespace RoadMatereal.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("RoleId")
+                        .HasColumnType("int");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -200,6 +206,8 @@ namespace RoadMatereal.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -249,6 +257,9 @@ namespace RoadMatereal.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdOrder"));
 
                     b.Property<int>("ClientID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Count")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
@@ -416,6 +427,13 @@ namespace RoadMatereal.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("RoadMatereal.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("RoadMatereal.Models.Role", null)
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId");
+                });
+
             modelBuilder.Entity("RoadMatereal.Models.Material", b =>
                 {
                     b.HasOne("RoadMatereal.Models.Supplier", "Supplier")
@@ -473,6 +491,11 @@ namespace RoadMatereal.Migrations
             modelBuilder.Entity("RoadMatereal.Models.Order", b =>
                 {
                     b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("RoadMatereal.Models.Role", b =>
+                {
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("RoadMatereal.Models.Status", b =>

@@ -1,0 +1,69 @@
+﻿@model RoadMatereal.ViewModels.UserProfileViewModel
+
+@{
+    ViewData["Title"] = "User Profile";
+}
+
+<h2>User Profile</h2>
+
+<div>
+    <h4>Name: @Model.FirstName @Model.LastName @Model.MiddleName</h4>
+    <p>Email: @Model.Email</p>
+</div>
+
+<h3>Your Orders</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Total Items</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Orders != null && Model.Orders.Count > 0)
+        {
+            foreach (var order in Model.Orders)
+            {
+                <tr>
+                    <td>@order.IdOrder</td>
+                    <td>@order.Date.ToShortDateString()</td>
+                    <td>@order.StatusID</td> <!-- You may want to map StatusID to a status name -->
+                    <td>@order.OrderItems.Count</td>
+                    <td>
+                        <form asp-action="DeleteOrder" method="post" style="display:inline;">
+                            <input type="hidden" name="orderId" value="@order.IdOrder" />
+                            <button type="submit" class="btn btn-danger">Delete Order</button>
+                        </form>
+                    </td>
+                </tr>
+
+                @if (order.OrderItems != null && order.OrderItems.Count > 0)
+                {
+                    foreach (var item in order.OrderItems)
+                    {
+                        <tr style="background-color: #f9f9f9;">
+                            <td colspan="2">Item: @item.Material.Name</td>
+                            <td>@item.Price.ToString("C")</td>
+                            <td>@item.Count</td>
+                            <td>
+                                <form asp-action="DeleteOrderItem" method="post" style="display:inline;">
+                                    <input type="hidden" name="orderItemId" value="@item.IdOrderItem" />
+                                    <button type="submit" class="btn btn-danger">Delete Item</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        }
+        else
+        {
+            <tr><td colspan="5">No orders found.</td></tr> <!-- Handle case with no orders -->
+        }
+    </tbody>
+</table>
+
+<a asp-controller="Home" asp-action="Index">Back to Home</a>

@@ -5,7 +5,7 @@ namespace RoadMatereal.Models
     public class OrderItem
     {
         [Key]
-        public required int IdOrderItem { get; set; }
+        public int IdOrderItem { get; set; }
 
         public required int OrderID { get; set; }
         public Order? Order { get; set; }

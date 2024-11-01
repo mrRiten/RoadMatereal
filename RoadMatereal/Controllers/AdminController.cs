@@ -1,24 +1,39 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RoadMatereal.Models;
 using RoadMatereal.Services;
 using RoadMatereal.ViewModels;
+using System.Security.Claims;
 
 namespace RoadMatereal.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "AdminManager")]
     public class AdminController(IOrderService orderService, IMaterialService materialService,
-        ISupplierService supplierService, IStatusService statusService) : Controller
+        ISupplierService supplierService, IStatusService statusService, ILogger<AdminController> logger,
+        UserManager<ApplicationUser> userManager) : Controller
     {
         private readonly IOrderService _orderService = orderService;
         private readonly IMaterialService _materialService = materialService;
         private readonly ISupplierService _supplierService = supplierService;
         private readonly IStatusService _statusService = statusService;
+        private readonly ILogger<AdminController> _logger = logger;
+        private readonly UserManager<ApplicationUser> _userManager = userManager;
 
         // Главная страница панели администратора
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId != null)
+            {
+                var user = await _userManager.FindByIdAsync(userId);
+                var roles = await _userManager.GetRolesAsync(user);
+                _logger.LogCritical($"{roles[0]}");
+            }
+
+
+
             var orderCount = (await _orderService.GetAllOrdersAsync()).Count();
             var materialCount = (await _materialService.GetAllMaterialsAsync()).Count();
             var supplierCount = (await _supplierService.GetAllSuppliersAsync()).Count();

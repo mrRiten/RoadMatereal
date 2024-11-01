@@ -4,6 +4,6 @@ namespace RoadMatereal.Models
 {
     public class Role : IdentityRole<int>
     {
-        public ICollection<ApplicationUser>? Users { get; set; }
+        // You can add additional properties if needed
     }
 }
