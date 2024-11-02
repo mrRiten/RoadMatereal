@@ -72,7 +72,7 @@ namespace RoadMatereal.Controllers
                 order = new Order
                 {
                     Date = DateTime.Now,
-                    StatusID = 5,
+                    StatusID = 1,
                     ClientID = userId,
                 };
 

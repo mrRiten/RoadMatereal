@@ -23,7 +23,8 @@ namespace RoadMatereal.Services
         public async Task<List<Order>> GetOrdersByUserIdAsync(string userId)
         {
             return await _context.Orders
-                .Include(o => o.OrderItems) // Include related OrderItems
+                .Include(o => o.Status)
+                .Include(o => o.OrderItems)
                 .ThenInclude(oi => oi.Material) // Include related Material for each OrderItem
                 .Where(o => o.ClientID.ToString() == userId) // Assuming ClientID is an int
                 .ToListAsync();

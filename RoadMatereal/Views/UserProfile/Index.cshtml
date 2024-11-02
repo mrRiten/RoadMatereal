@@ -30,7 +30,7 @@
                 <tr>
                     <td>@order.IdOrder</td>
                     <td>@order.Date.ToShortDateString()</td>
-                    <td>@order.StatusID</td> <!-- You may want to map StatusID to a status name -->
+                    <td>@order.Status.Name</td> <!-- You may want to map StatusID to a status name -->
                     <td>@order.OrderItems.Count</td>
                     <td>
                         <form asp-action="DeleteOrder" method="post" style="display:inline;">

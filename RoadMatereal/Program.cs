@@ -11,7 +11,7 @@ builder.Services.AddControllersWithViews();
 
 // Configure Entity Framework with SQL Server
 builder.Services.AddDbContext<RoadMaterialContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionPC")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionNote")));
 
 // Register application services
 builder.Services.AddScoped<IMaterialService, MaterialService>();
