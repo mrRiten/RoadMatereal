@@ -2,6 +2,22 @@
 
 <h2>Управление заказами</h2>
 
+<form method="get" asp-action="Orders">
+    <div class="form-group">
+        <label for="filterName">Фильтр:</label>
+        <input type="text" name="filterName" id="filterName" class="form-control" placeholder="Введите значение для фильтрации" />
+
+        <label for="filter">Тип фильтра:</label>
+        <select name="filter" id="filter" class="form-control">
+            <option value="">Выберите фильтр</option>
+            <option value="OrderDate">Дата заказа</option>
+            <option value="OrderClient">Клиент заказа</option>
+            <option value="OrderStatus">Статус заказа</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Применить фильтр</button>
+</form>
+
 <table class="table">
     <thead>
         <tr>

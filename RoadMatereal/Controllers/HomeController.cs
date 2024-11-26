@@ -22,7 +22,7 @@ namespace RoadMatereal.Controllers
         public async Task<IActionResult> Index(int? supplierId)
         {
             IEnumerable<Material> materials;
-            var suppliers = await _supplierService.GetAllSuppliersAsync();
+            var suppliers = await _supplierService.GetAllSuppliersAsync(null, null);
 
             if (supplierId != null)
             {
@@ -30,7 +30,7 @@ namespace RoadMatereal.Controllers
             }
             else
             {
-                materials = await _materialService.GetAllMaterialsAsync();
+                materials = await _materialService.GetAllMaterialsAsync(null, null);
             }
 
             var viewModel = new MaterialViewModel

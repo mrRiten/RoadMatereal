@@ -15,11 +15,11 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Order ID</th>
-            <th>Date</th>
-            <th>Status</th>
-            <th>Total Items</th>
-            <th>Actions</th>
+            <th>ID Заказа</th>
+            <th>Дата</th>
+            <th>Статус</th>
+            <th>Всего товаров</th>
+            <th>Действие</th>
         </tr>
     </thead>
     <tbody>
@@ -35,23 +35,63 @@
                     <td>
                         <form asp-action="DeleteOrder" method="post" style="display:inline;">
                             <input type="hidden" name="orderId" value="@order.IdOrder" />
-                            <button type="submit" class="btn btn-danger">Delete Order</button>
+                            @if (order.StatusID == 1)
+                            {
+                                <button type="submit" class="btn btn-danger">Удалить Заказ</button>
+
+                            }
+                        </form>
+                        <form asp-action="ConfirmOrder" method="get" style="display:inline;">
+                            <input type="hidden" name="orderId" value="@order.IdOrder" />
+
+                            @if (order.StatusID == 1)
+                            {
+                                <button type="submit" class="btn">Подтвердить</button>
+                            }
                         </form>
                     </td>
                 </tr>
 
-                @if (order.OrderItems != null && order.OrderItems.Count > 0)
+                @if (order.OrderItems != null && order.OrderItems.Count > 0 
+                && order.StatusID == 1)
+                {
+                    @foreach (var item in order.OrderItems)
+                    {
+                        <tr style="background-color: #f9f9f9;">
+                            <td colspan="2">Товар: @item.Material.Name</td>
+                            <td>@item.Price.ToString("C")</td>
+                            <td>
+                                <form asp-action="UpdateOrderItemCount" method="post" style="display:inline;">
+                                    <input type="hidden" name="orderItemId" value="@item.IdOrderItem" />
+                                    <input type="number" name="newCount" value="@item.Count" min="1" />
+                                    <button type="submit" class="btn btn-primary">Обновить</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form asp-action="DeleteOrderItem" method="post" style="display:inline;">
+                                    <input type="hidden" name="orderItemId" value="@item.IdOrderItem" />
+                                    <button type="submit" class="btn btn-danger">Удалить Продукт</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                @if (order.OrderItems != null && order.OrderItems.Count > 0
+               && order.StatusID != 1)
                 {
                     foreach (var item in order.OrderItems)
                     {
                         <tr style="background-color: #f9f9f9;">
-                            <td colspan="2">Item: @item.Material.Name</td>
+                            <td colspan="2">Товар: @item.Material.Name</td>
                             <td>@item.Price.ToString("C")</td>
                             <td>@item.Count</td>
                             <td>
                                 <form asp-action="DeleteOrderItem" method="post" style="display:inline;">
                                     <input type="hidden" name="orderItemId" value="@item.IdOrderItem" />
-                                    <button type="submit" class="btn btn-danger">Delete Item</button>
+                                    @if (order.StatusID == 1)
+                                    {
+                                        <button type="submit" class="btn btn-danger">Delete Item</button>
+                                    }
                                 </form>
                             </td>
                         </tr>

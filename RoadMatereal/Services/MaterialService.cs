@@ -5,7 +5,7 @@ namespace RoadMatereal.Services
 {
     public interface IMaterialService
     {
-        Task<IEnumerable<Material>> GetAllMaterialsAsync();
+        Task<IEnumerable<Material>> GetAllMaterialsAsync(string? filterName, FilterEnum? filter);
         Task<Material> GetMaterialByIdAsync(int id);
         Task CreateMaterialAsync(Material material);
 
@@ -19,11 +19,28 @@ namespace RoadMatereal.Services
     {
         private readonly RoadMaterialContext _context = context;
 
-        public async Task<IEnumerable<Material>> GetAllMaterialsAsync()
+        public async Task<IEnumerable<Material>> GetAllMaterialsAsync(string? filterName, FilterEnum? filter)
         {
-            return await _context.Materials
+            var allMaterial = await _context.Materials
                 .Include(m => m.Supplier)
                 .ToListAsync();
+
+            if ((filter == null && filterName != null) ||
+                (filter != null && filterName == null))
+            {
+                return allMaterial;
+            }
+
+            if (filter == FilterEnum.MaterialName)
+            {
+                return allMaterial.Where(m => m.Name == filterName);
+            }
+            else if (filter == FilterEnum.MaterialSupplier)
+            {
+                return allMaterial.Where(m => m.Supplier.Name == filterName);
+            }
+
+            return allMaterial;
         }
 
         public async Task<Material> GetMaterialByIdAsync(int id)

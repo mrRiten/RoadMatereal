@@ -2,11 +2,25 @@
 
 <h2>Управление поставщиками</h2>
 
+<form method="get" asp-action="Suppliers">
+    <div class="form-group">
+        <label for="filterName">Фильтр:</label>
+        <input type="text" name="filterName" id="filterName" class="form-control" placeholder="Введите значение для фильтрации" />
+
+        <label for="filter">Тип фильтра:</label>
+        <select name="filter" id="filter" class="form-control">
+            <option value="">Выберите фильтр</option>
+            <option value="SupplierName">Название Поставщика</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Применить фильтр</button>
+</form>
+
 <table class="table">
     <thead>
         <tr>
             <th>Название поставщика</th>
-            <th>Контактное лицо</th>
+            <th>Почта</th>
             <th>Телефон</th>
             <th>Действия</th>
         </tr>
@@ -16,6 +30,7 @@
         {
             <tr>
                 <td>@supplier.Name</td>
+                <td>@supplier.Email</td>
                 <td>@supplier.Phone</td>
                 <td>
                     <a href="@Url.Action("SupplierDetails", "Admin", new { id = supplier.IdSupplier })" class="btn btn-info">Детали</a>

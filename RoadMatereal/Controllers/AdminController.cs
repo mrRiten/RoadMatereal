@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 using RoadMatereal.Models;
 using RoadMatereal.Services;
 using RoadMatereal.ViewModels;
@@ -34,9 +35,9 @@ namespace RoadMatereal.Controllers
 
 
 
-            var orderCount = (await _orderService.GetAllOrdersAsync()).Count();
-            var materialCount = (await _materialService.GetAllMaterialsAsync()).Count();
-            var supplierCount = (await _supplierService.GetAllSuppliersAsync()).Count();
+            var orderCount = (await _orderService.GetAllOrdersAsync(null, null)).Count();
+            var materialCount = (await _materialService.GetAllMaterialsAsync(null, null)).Count();
+            var supplierCount = (await _supplierService.GetAllSuppliersAsync(null, null)).Count();
             var statusCount = (await _statusService.GetAllStatusesAsync()).Count();
 
             var dashboardData = new AdminDashboardViewModel
@@ -52,9 +53,9 @@ namespace RoadMatereal.Controllers
 
         // Список всех заказов
         [HttpGet]
-        public async Task<IActionResult> Orders()
+        public async Task<IActionResult> Orders(string? filterName, FilterEnum? filter)
         {
-            var orders = await _orderService.GetAllOrdersAsync();
+            var orders = await _orderService.GetAllOrdersAsync(filterName, filter);
             return View(orders);
         }
 
@@ -122,11 +123,10 @@ namespace RoadMatereal.Controllers
             return RedirectToAction(nameof(Orders));
         }
 
-        // Список всех материалов
-        [HttpGet]
-        public async Task<IActionResult> Materials()
+        // Список всех материалов [HttpGet]
+        public async Task<IActionResult> Materials(string? filterName, FilterEnum? filter)
         {
-            var materials = await _materialService.GetAllMaterialsAsync();
+            var materials = await _materialService.GetAllMaterialsAsync(filterName, filter);
             return View(materials);
         }
 
@@ -196,9 +196,9 @@ namespace RoadMatereal.Controllers
 
         // Список всех поставщиков
         [HttpGet]
-        public async Task<IActionResult> Suppliers()
+        public async Task<IActionResult> Suppliers(string? filterName, FilterEnum? filter)
         {
-            var suppliers = await _supplierService.GetAllSuppliersAsync();
+            var suppliers = await _supplierService.GetAllSuppliersAsync(filterName, filter);
             return View(suppliers);
         }
 

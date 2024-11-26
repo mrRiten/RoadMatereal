@@ -5,7 +5,6 @@ using RoadMatereal.Models;
 using RoadMatereal.Services;
 using RoadMatereal.ViewModels;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace RoadMatereal.Controllers
 {
@@ -43,6 +42,28 @@ namespace RoadMatereal.Controllers
             };
 
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateOrderItemCount(int orderItemId, int newCount)
+        {
+            var orderItem = await _orderService.GetOrderItemByIdAsync(orderItemId);
+
+            orderItem.Count = newCount;
+            orderItem.Price = orderItem.Price * orderItem.Count;
+
+            await _orderService.UpdateOrderItemAsync(orderItem);
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> ConfirmOrder(int orderId)
+        {
+            var order = await _orderService.GetOrderByIdAsync(orderId);
+
+            order.StatusID = 2;
+
+            await _orderService.UpdateOrderAsync(order);
+            return RedirectToAction("Index");
         }
 
         // POST: Delete Order

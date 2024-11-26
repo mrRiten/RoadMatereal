@@ -1,11 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Server.HttpSys;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Primitives;
 using RoadMatereal.Models;
 
 namespace RoadMatereal.Services
 {
     public interface ISupplierService
     {
-        Task<IEnumerable<Supplier>> GetAllSuppliersAsync();
+        Task<IEnumerable<Supplier>> GetAllSuppliersAsync(string? filterName, FilterEnum? filter);
         Task<Supplier> GetSupplierByIdAsync(int id);
         Task CreateSupplierAsync(Supplier supplier);
         Task UpdateSupplierAsync(Supplier supplier);
@@ -16,11 +18,25 @@ namespace RoadMatereal.Services
     {
         private readonly RoadMaterialContext _context = context;
 
-        public async Task<IEnumerable<Supplier>> GetAllSuppliersAsync()
+        public async Task<IEnumerable<Supplier>> GetAllSuppliersAsync(string? filterName, FilterEnum? filter)
         {
-            return await _context.Suppliers
+            var allSuppliers = await _context.Suppliers
                 .Include(s => s.Materials)
                 .ToListAsync();
+
+
+            if ((filter == null && filterName != null) ||
+                (filter != null && filterName == null))
+            {
+                return allSuppliers;
+            }
+
+            if (filter == FilterEnum.SupplierName)
+            {
+                return allSuppliers.Where(s => s.Name == filterName);
+            }
+
+            return allSuppliers;
         }
 
         public async Task<Supplier> GetSupplierByIdAsync(int id)
